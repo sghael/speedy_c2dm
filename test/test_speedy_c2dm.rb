@@ -20,7 +20,7 @@ class TestSpeedyC2DM < Test::Unit::TestCase
     end
   end
 
-  should "not raise an error if a send notification call suceeds" do
+  should "not raise an error if a send notification call succeeds" do
     assert_nothing_raised do
       speedyC2DM = SpeedyC2DM::API.new(TEST_EMAIL, TEST_PASSWORD)
 
