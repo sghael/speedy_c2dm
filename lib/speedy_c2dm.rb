@@ -58,13 +58,12 @@ module SpeedyC2DM
       #   see more documentation here:  http://code.google.com/android/c2dm/#testing
       if response.code.eql? 200
 
-        # look for the header 'Update-Client-Auth' 
-        # in the response you get after sending a message. It indicates that 
-        # this is the token to be used for the next message to send.
+        # look for the header 'Update-Client-Auth' in the response you get after sending 
+        # a message. It indicates that this is the token to be used for the next message to send.
         if response.headers_hash['Update-Client-Auth']
-          @auth_token = get_auth_token(@email, @password)
+          @auth_token = response.headers_hash['Update-Client-Auth']
         end
-        return "success: 200"
+        return response.inspect
 
       elsif response.code.eql? 401
 
@@ -74,18 +73,12 @@ module SpeedyC2DM
         hydra.run # this is a blocking call that returns once all requests are complete
 
         response_inner = request.response
-        if response_inner.code.eql? 200
-          return "success"
-        elsif response_inner.code.eql? 401
-          return "failed: 401 - auth failed"
-        elsif response_inner.code.eql? 503
-          return "failed: 503 - service unavailable"        
-        end
+        return response.inspect
 
       elsif response.code.eql? 503
-
+        
         # service un-available.
-        return "failed: 503 - service unavailable"
+        return response.inspect
 
       end
     end

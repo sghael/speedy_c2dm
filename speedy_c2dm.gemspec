@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.email       = ["sghael@ravidapp.com"]
   s.homepage    = ""
   s.summary     = %q{Speedy C2DM is an intelligent gem for sending push notifications to Android devices via Google C2DM.}
-  s.description = %q{Speedy C2DM sends push notifications to Android devices via google c2dm.}
+  s.description = %q{Speedy C2DM efficiently sends push notifications to Android devices via google c2dm.}
 
   s.rubyforge_project = "speedy_c2dm"
 
