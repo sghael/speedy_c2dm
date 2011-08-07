@@ -1,4 +1,4 @@
-# c2dm
+# Speedy C2DM
 
 c2dm sends push notifications to Android devices via google [c2dm](http://code.google.com/android/c2dm/index.html).
 
@@ -18,16 +18,16 @@ An Android device running 2.2 or newer, its registration token, and a google acc
 
 ##Usage
 
-c2dm = SpeedyC2DM::API.new(TEST_EMAIL, TEST_PASSWORD)
+    c2dm = SpeedyC2DM::API.new(TEST_EMAIL, TEST_PASSWORD)
 
-options = {
-  :registration_id => TEST_REGISTRATION_ID,
-  :message => "Hi!",
-  :extra_data => 42,
-  :collapse_key => "some-collapse-key"
-}
+    options = {
+      :registration_id => TEST_REGISTRATION_ID,
+      :message => "Hi!",
+      :extra_data => 42,
+      :collapse_key => "some-collapse-key"
+    }
 
-response = c2dm.send_notification(options)
+    response = c2dm.send_notification(options)
 
 Note:  there are blocking calls in both .new() and .send_notification().  You should use an async queue like Resque to ensure non-blocking behavior in your application code.
 
@@ -35,12 +35,13 @@ Note:  there are blocking calls in both .new() and .send_notification().  You sh
 ##Testing
 
 to test, first fill out these variables in test/test_speedy_c2dm.rb:
-  TEST_EMAIL = "TODO - Fill me"
-  TEST_PASSWORD = "TODO - Fill me"
-  TEST_REGISTRATION_ID = "TODO - Fill me"  
+
+    TEST_EMAIL = "TODO - Fill me"
+    TEST_PASSWORD = "TODO - Fill me"
+    TEST_REGISTRATION_ID = "TODO - Fill me"  
 
 then run:
-	$ ruby test/test_speedy_c2dm.rb
+  	$ ruby test/test_speedy_c2dm.rb
 
 ##Copyrights
 
