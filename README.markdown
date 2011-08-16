@@ -1,6 +1,8 @@
 # Speedy C2DM
 
-c2dm sends push notifications to Android devices via google [c2dm](http://code.google.com/android/c2dm/index.html).
+Speedy C2DM sends push notifications to Android devices via Google's [c2dm](http://code.google.com/android/c2dm/index.html) (Cloud To Device Messaging).
+
+Pull request are welcome!
 
 # How is this GEM different than other C2DM gems?
 
@@ -14,11 +16,13 @@ This GEM will request the token when the SpeedyC2DM::API class is first initiali
     
 ##Requirements
 
-An Android device running 2.2 or newer, its registration token, and a google account registered for c2dm.
+An Android device running 2.2 or newer, its registration token, and a Google account registered for c2dm.
 
+##Compatability
+
+Speedy_C2DM will work with Rails 3.x & Ruby 1.9x.  It may work with older versions of Ruby, but has not been tested on previous versions or Rails or Ruby.
 
 ##Usage
-
 
 For a Rails app, a good place to put the following would be in config/initializers/speedy_c2dm.rb :
 
@@ -38,12 +42,12 @@ Then, where you want to make a C2DM call in your code, create an options hash an
 
     response = c2dm.send_notification(options)
 
-Note:  there are blocking calls in both .new() and .send_notification().  You should use an async queue like [Resque](https://github.com/defunkt/resque) to ensure a non-blocking code path in your application code.
+Note:  there are blocking calls in both .new() and .send_notification().  You should use an async queue like [Resque](https://github.com/defunkt/resque) to ensure a non-blocking code path in your application code, particularly for the .send_notification() call.
 
 
 ##Testing
 
-to test, first fill out these variables in test/test_speedy_c2dm.rb:
+To test, first fill out these variables in test/test_speedy_c2dm.rb:
 
     TEST_EMAIL = "TODO - Fill me"
     TEST_PASSWORD = "TODO - Fill me"
