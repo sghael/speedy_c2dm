@@ -2,7 +2,7 @@
 
 Speedy C2DM sends push notifications to Android devices via Google's [c2dm](http://code.google.com/android/c2dm/index.html) (Cloud To Device Messaging).
 
-Pull request are welcome!
+Pull requests are welcome!
 
 # How is this GEM different than other C2DM gems?
 
@@ -18,9 +18,9 @@ This GEM will request the token when the SpeedyC2DM::API class is first initiali
 
 An Android device running 2.2 or newer, its registration token, and a Google account registered for c2dm.
 
-##Compatability
+##Compatibility
 
-Speedy_C2DM will work with Rails 3.x & Ruby 1.9x.  It may work with older versions of Ruby, but has not been tested on previous versions or Rails or Ruby.
+Speedy_C2DM will work with Rails 3.x & Ruby 1.9x.  It has not been tested on previous versions or Rails or Ruby, and may or may not work with those versions.
 
 ##Usage
 
