@@ -6,7 +6,7 @@ Pull requests are welcome!
 
 # How is this GEM different than other C2DM gems?
 
-To use C2DM, your application server needs to fetch and store authenticaion tokens from Google.  This token will periodically expire and the recommendation from Google is that "the server should store the token and have a policy to refresh it periodically."   Other C2DM gems take a brute force approach around this issue by requesting a new authenticaion token from Google for *each* notification request they send.  This effectively doubles the number of HTTP calls being made for each C2DM notification sent.
+To use C2DM, your application server needs to fetch and store an authentication token from Google.  This token will periodically expire and the recommendation from Google is that "the server should store the token and have a policy to refresh it periodically."   Other C2DM gems take a brute force approach around this issue by requesting a new authenticaion token from Google for *each* notification request they send.  This effectively doubles the number of HTTP calls being made for each C2DM notification sent.
 
 This GEM will request the token when the SpeedyC2DM::API class is first initialized.  From then on, calls to SpeedyC2DM::API.send_notification() will use the auth token stored in the class instance variable.  On subsequent notification calls, the object will check for 'Update-Client-Auth' or check for status 401 (auth failed).  If it detects either the 401 or an 'Update-Client-Auth' header, speedy_c2dm will immediately request new tokens from Google.  In the case of status 503 (service unavailable), a return message indicating 503 is returned from the send_notification() call.  It is suggested (by Google) that you retry after exponential back-off in the case of 503.  Using something like [resque-retry](https://github.com/lantins/resque-retry) would work well in this case.
 
@@ -29,7 +29,7 @@ For a Rails app, a good place to put the following would be in config/initialize
     C2DM_EMAIL = "myemail@gmail.com"
     C2DM_PASSWORD = "mypassword"
 
-    c2dm = SpeedyC2DM::API.new(C2DM_EMAIL, C2DM_PASSWORD)
+    @@c2dm = SpeedyC2DM::API.new(C2DM_EMAIL, C2DM_PASSWORD)
 
 Then, where you want to make a C2DM call in your code, create an options hash and pass it to send_notification():
 
@@ -40,7 +40,7 @@ Then, where you want to make a C2DM call in your code, create an options hash an
       :collapse_key => "some-collapse-key"
     }
 
-    response = c2dm.send_notification(options)
+    response = @@c2dm.send_notification(options)
 
 Note:  there are blocking calls in both .new() and .send_notification().  You should use an async queue like [Resque](https://github.com/defunkt/resque) to ensure a non-blocking code path in your application code, particularly for the .send_notification() call.
 
