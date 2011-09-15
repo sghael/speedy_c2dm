@@ -60,7 +60,7 @@ module SpeedyC2DM
 
         # look for the header 'Update-Client-Auth' in the response you get after sending 
         # a message. It indicates that this is the token to be used for the next message to send.
-        if response.headers_hash['Update-Client-Auth']
+        if response.headers_hash['Update-Client-Auth'].present?
           @auth_token = response.headers_hash['Update-Client-Auth']
         end
         return response.inspect
