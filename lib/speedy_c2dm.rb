@@ -69,10 +69,10 @@ module SpeedyC2DM
 
         # auth failed.  Refresh auth key and requeue
         @auth_token = get_auth_token(@email, @password)
-        hydra.queue request(options)
+        hydra.queue requestObject(options)
         hydra.run # this is a blocking call that returns once all requests are complete
 
-        response_inner = request.response
+        response = request.response
         return response.inspect
 
       elsif response.code.eql? 503
