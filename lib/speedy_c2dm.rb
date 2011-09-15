@@ -85,9 +85,13 @@ module SpeedyC2DM
   
     def requestObject(options)
       payload = {}
-      payload[:registration_id] = options.delete(:registration_id)
-      payload[:collapse_key] = options.delete(:collapse_key)
-      options.each {|key, value| payload["data.#{key}"] = value}
+      options.each do |key, value| 
+        if [:registration_id, :collapse_key].include? key
+          payload[key] = value
+        else
+          payload["data.#{key}"] = value
+        end
+      end
 
       Typhoeus::Request.new(PUSH_URL, {
         :method => :post,
