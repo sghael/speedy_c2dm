@@ -60,7 +60,7 @@ module SpeedyC2DM
 
         # look for the header 'Update-Client-Auth' in the response you get after sending 
         # a message. It indicates that this is the token to be used for the next message to send.
-        if response.headers_hash['Update-Client-Auth']
+        if response.headers_hash['Update-Client-Auth'].present?
           @auth_token = response.headers_hash['Update-Client-Auth']
         end
         return response.inspect
@@ -69,10 +69,10 @@ module SpeedyC2DM
 
         # auth failed.  Refresh auth key and requeue
         @auth_token = get_auth_token(@email, @password)
-        hydra.queue request(options)
+        hydra.queue requestObject(options)
         hydra.run # this is a blocking call that returns once all requests are complete
 
-        response_inner = request.response
+        response = request.response
         return response.inspect
 
       elsif response.code.eql? 503
@@ -85,9 +85,13 @@ module SpeedyC2DM
   
     def requestObject(options)
       payload = {}
-      payload[:registration_id] = options.delete(:registration_id)
-      payload[:collapse_key] = options.delete(:collapse_key)
-      options.each {|key, value| payload["data.#{key}"] = value}
+      options.each do |key, value| 
+        if [:registration_id, :collapse_key].include? key
+          payload[key] = value
+        else
+          payload["data.#{key}"] = value
+        end
+      end
 
       Typhoeus::Request.new(PUSH_URL, {
         :method => :post,
