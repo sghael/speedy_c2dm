@@ -1,12 +1,11 @@
 require "speedy_c2dm/version"
-require 'typhoeus'
 
 module SpeedyC2DM
-      
+
   class API
     AUTH_URL = 'https://www.google.com/accounts/ClientLogin'
     PUSH_URL = 'https://android.apis.google.com/c2dm/send'
-    
+
     # Initialize with an API key and config options
     def initialize(email, password)
       @email = email
@@ -16,16 +15,17 @@ module SpeedyC2DM
     end
 
     def get_auth_token(email, password)
-      post_body = "accountType=HOSTED_OR_GOOGLE&Email=#{email}&Passwd=#{password}&service=ac2dm"
-      params = {
-        :body => post_body,
-        :headers => {
-          'Content-type' => 'application/x-www-form-urlencoded',
-          'Content-length' => "#{post_body.length}"
-        }
-      }
-      response = Typhoeus::Request.post(AUTH_URL, params)
-      return response.body.split("\n")[2].gsub("Auth=", "")      
+      data = "accountType=HOSTED_OR_GOOGLE&Email=#{email}&Passwd=#{password}&service=ac2dm"
+      headers = { "Content-type" => "application/x-www-form-urlencoded",
+                  "Content-length" => "#{data.length}"}
+
+      uri = URI.parse(AUTH_URL)
+      http = Net::HTTP.new(uri.host, uri.port)
+      # http.use_ssl = true
+      # http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+      response, body = http.post(uri.path, data, headers)
+      return body.split("\\\\n")[2].gsub("Auth=", "")
     end
 
     # Send a notification
@@ -42,66 +42,63 @@ module SpeedyC2DM
     #   :collapse_key => "some-collapse-key"
     # }
     def send_notification(options)
-      request = requestObject(options)
+      response = notificationRequest(options)
 
-      hydra = Typhoeus::Hydra.new
-      hydra.queue request
-      hydra.run # this is a blocking call that returns once all requests are complete
-      
-      # the response object will be set after the request is run
-      response = request.response
-      
-      # the response can be one of three codes:  
+      # the response can be one of three codes:
       #   200 (success)
       #   401 (auth failed)
       #   503 (retry later with exponential backoff)
       #   see more documentation here:  http://code.google.com/android/c2dm/#testing
       if response.code.eql? 200
 
-        # look for the header 'Update-Client-Auth' in the response you get after sending 
+        # look for the header 'Update-Client-Auth' in the response you get after sending
         # a message. It indicates that this is the token to be used for the next message to send.
-        if response.headers_hash['Update-Client-Auth'].present?
-          @auth_token = response.headers_hash['Update-Client-Auth']
+        response.each_header do |key, value|
+          if key == "Update-Client-Auth"
+            @auth_token = value
+          end
         end
+
         return response.inspect
 
       elsif response.code.eql? 401
 
         # auth failed.  Refresh auth key and requeue
         @auth_token = get_auth_token(@email, @password)
-        hydra.queue requestObject(options)
-        hydra.run # this is a blocking call that returns once all requests are complete
+        
+        response = notificationRequest(options)
 
-        response = request.response
         return response.inspect
 
       elsif response.code.eql? 503
-        
+
         # service un-available.
         return response.inspect
 
       end
     end
-  
-    def requestObject(options)
-      payload = {}
-      options.each do |key, value| 
+
+    def notificationRequest(options)
+      data = {}
+      options.each do |key, value|
         if [:registration_id, :collapse_key].include? key
-          payload[key] = value
+          data[key] = value
         else
-          payload["data.#{key}"] = value
+          data["data.#{key}"] = value
         end
       end
 
-      Typhoeus::Request.new(PUSH_URL, {
-        :method => :post,
-        :params   => payload,
-        :headers  => {
-          'Authorization' => "GoogleLogin auth=#{@auth_token}"
-        }
-      })
+      data = data.map{|k, v| "&#{k}=#{URI.escape(v)}"}.reduce{|k, v| k + v}
+      headers = { "Authorization" => "GoogleLogin auth=#{@auth_token}" 
+                  "Content-length" => "#{data.length}" }
+      uri = URI.parse(PUSH_URL)
+      http = Net::HTTP.new(uri.host, uri.port)
+      # http.use_ssl = true
+      # http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+      http.post(uri.path, data, headers)
     end
-    
+
   end
 
 end
