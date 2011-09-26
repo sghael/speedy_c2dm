@@ -89,7 +89,7 @@ module SpeedyC2DM
       end
 
       data = data.map{|k, v| "&#{k}=#{URI.escape(v)}"}.reduce{|k, v| k + v}
-      headers = { "Authorization" => "GoogleLogin auth=#{@auth_token}" 
+      headers = { "Authorization" => "GoogleLogin auth=#{@auth_token}",
                   "Content-length" => "#{data.length}" }
       uri = URI.parse(PUSH_URL)
       http = Net::HTTP.new(uri.host, uri.port)
