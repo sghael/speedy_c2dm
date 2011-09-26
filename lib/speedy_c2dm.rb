@@ -66,7 +66,7 @@ module SpeedyC2DM
 
         # auth failed.  Refresh auth key and requeue
         @auth_token = get_auth_token(@email, @password)
-        
+
         response = notificationRequest(options)
 
         return response.inspect
