@@ -1,4 +1,5 @@
 require "speedy_c2dm/version"
+require "net/http"
 
 module SpeedyC2DM
 
@@ -21,11 +22,11 @@ module SpeedyC2DM
 
       uri = URI.parse(AUTH_URL)
       http = Net::HTTP.new(uri.host, uri.port)
-      # http.use_ssl = true
-      # http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
       response, body = http.post(uri.path, data, headers)
-      return body.split("\\\\n")[2].gsub("Auth=", "")
+      return body.split("\n")[2].gsub("Auth=", "")
     end
 
     # Send a notification
@@ -93,8 +94,8 @@ module SpeedyC2DM
                   "Content-length" => "#{data.length}" }
       uri = URI.parse(PUSH_URL)
       http = Net::HTTP.new(uri.host, uri.port)
-      # http.use_ssl = true
-      # http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
       http.post(uri.path, data, headers)
     end
