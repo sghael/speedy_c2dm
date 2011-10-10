@@ -60,7 +60,7 @@ module SpeedyC2DM
           end
         end
 
-        return response.inspect
+        return response.body
 
       elsif response.code.eql? "401"
 
