@@ -50,7 +50,7 @@ module SpeedyC2DM
       #   401 (auth failed)
       #   503 (retry later with exponential backoff)
       #   see more documentation here:  http://code.google.com/android/c2dm/#testing
-      if response.code.eql? 200
+      if response.code.eql? "200"
 
         # look for the header 'Update-Client-Auth' in the response you get after sending
         # a message. It indicates that this is the token to be used for the next message to send.
@@ -62,7 +62,7 @@ module SpeedyC2DM
 
         return response.inspect
 
-      elsif response.code.eql? 401
+      elsif response.code.eql? "401"
 
         # auth failed.  Refresh auth key and requeue
         @auth_token = get_auth_token(@email, @password)
@@ -71,7 +71,7 @@ module SpeedyC2DM
 
         return response.inspect
 
-      elsif response.code.eql? 503
+      elsif response.code.eql? "503"
 
         # service un-available.
         return response.inspect
