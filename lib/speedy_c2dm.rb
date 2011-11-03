@@ -1,5 +1,4 @@
 require "speedy_c2dm/version"
-require "net/http"
 
 module SpeedyC2DM
 
@@ -9,9 +8,9 @@ module SpeedyC2DM
 
     class << self
 
-      def set_account(email, password)
-        @email = email
-        @password = password
+      def set_account(api_email, api_password)
+        @email = api_email
+        @password = api_password
       end
 
       # Send a notification
@@ -102,5 +101,6 @@ module SpeedyC2DM
       end
 
     end
+  
   end
 end
