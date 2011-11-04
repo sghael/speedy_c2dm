@@ -82,7 +82,7 @@ module SpeedyC2DM
       def notificationRequest(options)
         data = {}
         options.each do |key, value|
-          if [:registration_id, :collapse_key].include? key
+          if [:registration_id, "registration_id", :collapse_key, "collapse_key"].include? key
             data[key] = value
           else
             data["data.#{key}"] = value
@@ -91,6 +91,7 @@ module SpeedyC2DM
 
         data = data.map{|k, v| "&#{k}=#{URI.escape(v.to_s)}"}.reduce{|k, v| k + v}
         headers = { "Authorization" => "GoogleLogin auth=#{@auth_token}",
+                    "Content-type" => "application/x-www-form-urlencoded",
                     "Content-length" => "#{data.length}" }
         uri = URI.parse(PUSH_URL)
         http = Net::HTTP.new(uri.host, uri.port)
