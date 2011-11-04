@@ -40,7 +40,7 @@ Then, where you want to make a C2DM call in your code, create an options hash an
     options = {
       :registration_id => SOME_REGISTRATION_ID,
       :message => "Hi!",
-      :extra_data => 42,
+      :extra_data => nil,
       :collapse_key => "some-collapse-key"
     }
 
