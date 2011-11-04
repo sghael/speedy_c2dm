@@ -46,7 +46,7 @@ Then, where you want to make a C2DM call in your code, create an options hash an
 
     response = SpeedyC2DM::API.send_notification(options)
 
-Note:  there are blocking calls in both .new() and .send_notification().  You should use an async queue like [Resque](https://github.com/defunkt/resque) to ensure a non-blocking code path in your application code, particularly for the .send_notification() call.
+Note:  there are blocking calls in both .set_account() and .send_notification().  You should use an async queue like [Resque](https://github.com/defunkt/resque) to ensure a non-blocking code path in your application code, particularly for the .send_notification() call.
 
 
 ##Testing
