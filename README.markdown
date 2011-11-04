@@ -22,6 +22,10 @@ An Android device running 2.2 or newer, its registration token, and a Google acc
 
 Speedy_C2DM will work with Rails 3.x & Ruby 1.9x.  It has not been tested on previous versions or Rails or Ruby, and may or may not work with those versions.
 
+##Backwards Compatibility
+
+v1.0.0 is not backwards compatible with previous version.  If you are migrating from a version prior to v1.0.0 please see the new usage instructions below.
+
 ##Usage
 
 For a Rails app, a good place to put the following would be in config/initializers/speedy_c2dm.rb :
