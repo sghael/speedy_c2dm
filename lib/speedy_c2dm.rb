@@ -46,7 +46,7 @@ module SpeedyC2DM
             end
           end
 
-          return response.body
+          return response
 
         elsif response.code.eql? "401"
 
@@ -55,12 +55,12 @@ module SpeedyC2DM
 
           response = notificationRequest(options)
 
-          return response.inspect
+          return response
 
         elsif response.code.eql? "503"
 
           # service un-available.
-          return response.inspect
+          return response
 
         end
       end
