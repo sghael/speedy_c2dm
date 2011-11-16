@@ -18,6 +18,10 @@ This GEM will request the token when the SpeedyC2DM::API.send_notification() cla
 
 An Android device running 2.2 or newer, its registration token, and a Google account registered for c2dm.
 
+Also, make sure 'net/http' is available:
+    
+    require "net/http"
+
 ##Compatibility
 
 Speedy_C2DM will work with Rails 3.x & Ruby 1.9x.  It has not been tested on previous versions or Rails or Ruby, and may or may not work with those versions.
