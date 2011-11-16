@@ -18,9 +18,10 @@ This GEM will request the token when the SpeedyC2DM::API.send_notification() cla
 
 An Android device running 2.2 or newer, its registration token, and a Google account registered for c2dm.
 
-Also, make sure 'net/http' is available:
+Also, make sure 'net/http' and 'net/https' are available:
     
     require "net/http"
+    require "net/https"
 
 ##Compatibility
 
