@@ -75,8 +75,8 @@ module SpeedyC2DM
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-        response, body = http.post(uri.path, data, headers)
-        return body.split("\n")[2].gsub("Auth=", "")
+        response = http.post(uri.path, data, headers)
+        return response.body.split("\n")[2].gsub("Auth=", "")
       end
 
       def notificationRequest(options)
